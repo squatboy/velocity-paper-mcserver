@@ -102,7 +102,7 @@ module "lambda" {
 
   project_name        = var.project_name
   discord_webhook_url = var.discord_webhook_url
-  sns_topic_arn       = module.sns.sns_topic_arn
+  
 }
 
 # SNS Topic에 Lambda 구독 추가

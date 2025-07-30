@@ -6,3 +6,5 @@
 *.tfvars
 docs
 *.md
+.github/
+.env
