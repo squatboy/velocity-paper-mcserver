@@ -38,15 +38,15 @@ output "private_subnet_cidr" {
   value       = aws_subnet.private.cidr_block
 }
 
-output "nat_gateway_ids" {
-  description = "NAT Gateway ID"
-  value       = aws_nat_gateway.mcserver_nat.id
-}
+# output "nat_gateway_ids" {
+#   description = "NAT Gateway ID"
+#   value       = aws_nat_gateway.mcserver_nat.id
+# }
 
-output "nat_gateway_public_ip" {
-  description = "NAT Gateway Public IP"
-  value       = aws_eip.nat.public_ip
-}
+# output "nat_gateway_public_ip" {
+#   description = "NAT Gateway Public IP"
+#   value       = aws_eip.nat.public_ip
+# }
 
 output "public_route_table_id" {
   description = "Public 라우팅 테이블 ID"
