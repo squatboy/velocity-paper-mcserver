@@ -22,10 +22,8 @@
 ```
 docs/
 - architecture.md       # 프로젝트의 아키텍처 상세 설명
-- deployment-steps.md   # 단계별 배포 순서와 검증 방법
 - itzg-container.md     # 사용되는 Docker 이미지/컨테이너 구성 상세
 - action-flow.json      # 아키텍쳐의 실제 동작 과정 워크플로우
-- aws-well-architected-framework.md # AWS Well-Architected Framework 6대원칙을 지켜. 이문서는 수정하지마.
 ```
 
 ## 개발 방법론

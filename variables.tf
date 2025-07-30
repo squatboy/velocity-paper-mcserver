@@ -82,8 +82,8 @@ variable "velocity_ebs_size" {
 # Monitoring Module Variables
 # =============================================================================
 
-variable "alert_email" {
-  description = "모니터링 알림을 받을 이메일 주소 (선택사항)"
+variable "discord_webhook_url" {
+  description = "Discord 웹훅 URL"
   type        = string
-  default     = ""
+  sensitive   = true
 }

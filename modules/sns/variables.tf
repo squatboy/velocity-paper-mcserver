@@ -1,10 +1,5 @@
 variable "project_name" {
-  description = "Project name for resource naming"
+  description = "The name of the project"
   type        = string
 }
 
-variable "alert_email" {
-  description = "Email address for alerts"
-  type        = string
-  default     = ""
-}

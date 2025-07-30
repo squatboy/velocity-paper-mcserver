@@ -1,3 +1,6 @@
+# =================
+# VPC 모듈 호출
+# =================
 module "vpc" {
   source = "./modules/vpc"
 
@@ -8,7 +11,9 @@ module "vpc" {
   private_subnet_cidr = var.private_subnet_cidr
 }
 
+# =================
 # Security 모듈 호출
+# =================
 module "security" {
   source = "./modules/security"
 
@@ -20,14 +25,18 @@ module "security" {
   depends_on = [module.vpc]
 }
 
+# =================
 # IAM 모듈 호출
+# =================
 module "iam" {
   source = "./modules/iam"
 
   project_name = var.project_name
 }
 
+# =================
 # EBS 모듈 호출
+# =================
 module "ebs" {
   source = "./modules/ebs"
 
@@ -37,7 +46,9 @@ module "ebs" {
   velocity_ebs_size = var.velocity_ebs_size
 }
 
+# =================
 # EC2 모듈 호출
+# =================
 module "ec2" {
   source = "./modules/ec2"
 
@@ -64,7 +75,9 @@ module "ec2" {
 # 모니터링 및 알림 모듈 호출
 # =============================================================================
 
-# VPC Flow Logs 모듈 호출
+# =================
+# VPC Flow Logs 모듈 
+# =================
 module "flow_logs" {
   source = "./modules/flow_logs"
 
@@ -75,15 +88,42 @@ module "flow_logs" {
   depends_on = [module.vpc]
 }
 
-# SNS 모듈 호출
+# =================
+# SNS, Lambda 
+# =================
 module "sns" {
   source = "./modules/sns"
 
   project_name = var.project_name
-  alert_email  = var.alert_email
 }
 
-# CloudWatch 모듈 호출
+module "lambda" {
+  source = "./modules/lambda"
+
+  project_name        = var.project_name
+  discord_webhook_url = var.discord_webhook_url
+  sns_topic_arn       = module.sns.sns_topic_arn
+}
+
+# SNS Topic에 Lambda 구독 추가
+resource "aws_sns_topic_subscription" "lambda_alerts" {
+  topic_arn = module.sns.sns_topic_arn
+  protocol  = "lambda"
+  endpoint  = module.lambda.lambda_arn
+}
+
+# Lambda 함수에 SNS 호출 권한 부여
+resource "aws_lambda_permission" "sns_invoke" {
+  statement_id  = "AllowExecutionFromSNS"
+  action        = "lambda:InvokeFunction"
+  function_name = module.lambda.lambda_function_name
+  principal     = "sns.amazonaws.com"
+  source_arn    = module.sns.sns_topic_arn
+}
+
+# =================
+# CloudWatch 모듈
+# =================
 module "cloudwatch" {
   source = "./modules/cloudwatch"
 
@@ -92,6 +132,6 @@ module "cloudwatch" {
   paper_instance_id     = module.ec2.ec2_instances_info.paper.id
   sns_topic_arn         = module.sns.sns_topic_arn
 
-  # EC2 및 SNS 모듈 완료 후 실행
-  depends_on = [module.ec2, module.sns]
+  # EC2 및 SNS, Lambda 모듈 완료 후 실행
+  depends_on = [module.ec2, module.sns, module.lambda]
 }
