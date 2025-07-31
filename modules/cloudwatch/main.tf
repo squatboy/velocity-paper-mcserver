@@ -48,7 +48,7 @@ resource "aws_cloudwatch_metric_alarm" "velocity_cpu_high" {
   namespace           = "AWS/EC2"
   period              = "300"
   statistic           = "Average"
-  threshold           = "80"
+  threshold           = "90"
   alarm_description   = "This metric monitors velocity ec2 cpu utilization"
   alarm_actions       = [var.sns_topic_arn]
 
@@ -70,7 +70,7 @@ resource "aws_cloudwatch_metric_alarm" "paper_cpu_high" {
   namespace           = "AWS/EC2"
   period              = "300"
   statistic           = "Average"
-  threshold           = "80"
+  threshold           = "90"
   alarm_description   = "This metric monitors paper ec2 cpu utilization"
   alarm_actions       = [var.sns_topic_arn]
 
@@ -92,7 +92,7 @@ resource "aws_cloudwatch_metric_alarm" "paper_memory_high" {
   namespace           = "CWAgent"
   period              = "300"
   statistic           = "Average"
-  threshold           = "85"
+  threshold           = "90"
   alarm_description   = "This metric monitors paper ec2 memory utilization"
   alarm_actions       = [var.sns_topic_arn]
 
