@@ -51,6 +51,20 @@ resource "aws_s3_bucket_policy" "vpc_flow_logs_policy" {
   })
 }
 
+# S3 버킷 수명 주기 정책 (30일 후 로그 삭제)
+resource "aws_s3_bucket_lifecycle_configuration" "vpc_flow_logs_lifecycle" {
+  bucket = aws_s3_bucket.vpc_flow_logs.id
+
+  rule {
+    id     = "log-expiration"
+    status = "Enabled"
+
+    expiration {
+      days = 30
+    }
+  }
+}
+
 # VPC Flow Logs 활성화 (S3로 전송)
 resource "aws_flow_log" "vpc_flow_log" {
   iam_role_arn    = aws_iam_role.flow_log.arn
