@@ -70,6 +70,18 @@ module "ec2" {
   depends_on = [module.vpc, module.security, module.iam, module.ebs]
 }
 
+# =============================================================================
+# 백업 모듈 호출
+# =============================================================================
+module "dlm" {
+  source = "./modules/dlm"
+
+  project_name = var.project_name
+  dlm_role_arn = module.iam.dlm_role_arn
+
+  depends_on = [module.iam]
+}
+
 
 # =============================================================================
 # 모니터링 및 알림 모듈 호출
