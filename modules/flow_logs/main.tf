@@ -55,7 +55,7 @@ resource "aws_s3_bucket_policy" "vpc_flow_logs_policy" {
 resource "aws_flow_log" "vpc_flow_log" {
   iam_role_arn    = aws_iam_role.flow_log.arn
   log_destination = aws_s3_bucket.vpc_flow_logs.arn
-  traffic_type    = "ALL"
+  traffic_type    = "REJECT"
   vpc_id          = var.vpc_id
   
   tags = {

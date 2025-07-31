@@ -11,3 +11,4 @@ docs
 *.md
 .github/
 .env
+.zip
