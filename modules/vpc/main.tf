@@ -26,39 +26,52 @@ resource "aws_subnet" "public" {
   }
 }
 
-# Private Subnet 생성 (Paper EC2용)
+# 테스트용 ㅋㅋ
 resource "aws_subnet" "private" {
   vpc_id            = aws_vpc.main.id
   cidr_block        = var.private_subnet_cidr
   availability_zone = var.availability_zone
+  # Public IP 자동 할당
+  map_public_ip_on_launch = true
   
   tags = {
     Name = "${var.project_name}-private-subnet"
   }
 }
 
-# NAT Gateway용 Elastic IP 생성
-resource "aws_eip" "nat" {
-  domain = "vpc"
+# # Private Subnet 생성 (Paper EC2용)
+# resource "aws_subnet" "private" {
+#   vpc_id            = aws_vpc.main.id
+#   cidr_block        = var.private_subnet_cidr
+#   availability_zone = var.availability_zone
+  
+#   tags = {
+#     Name = "${var.project_name}-private-subnet"
+#   }
+# }
 
-  # IGW가 생성된 후에 EIP 생성
-  depends_on = [aws_internet_gateway.mcserver_igw]
-  tags = {
-    Name = "${var.project_name}-nat-eip"
-  }
-}
+# # NAT Gateway용 Elastic IP 생성
+# resource "aws_eip" "nat" {
+#   domain = "vpc"
 
-# NAT Gateway 생성 (Private Subnet 아웃바운드용)
-resource "aws_nat_gateway" "mcserver_nat" {
-  allocation_id = aws_eip.nat.id
-  subnet_id     = aws_subnet.public.id
+#   # IGW가 생성된 후에 EIP 생성
+#   depends_on = [aws_internet_gateway.mcserver_igw]
+#   tags = {
+#     Name = "${var.project_name}-nat-eip"
+#   }
+# }
 
-  # IGW가 생성된 후에 NAT Gateway 생성
-  depends_on = [aws_internet_gateway.mcserver_igw]
-  tags = {
-    Name = "${var.project_name}-natgw"
-  }
-}
+# # NAT Gateway 생성 (Private Subnet 아웃바운드용)
+# resource "aws_nat_gateway" "mcserver_nat" {
+#   allocation_id = aws_eip.nat.id
+#   subnet_id     = aws_subnet.public.id
+
+#   # IGW가 생성된 후에 NAT Gateway 생성
+#   depends_on = [aws_internet_gateway.mcserver_igw]
+#   tags = {
+#     Name = "${var.project_name}-natgw"
+#   }
+# }
 
 # Public 라우팅 테이블 생성
 resource "aws_route_table" "public" {
@@ -78,7 +91,8 @@ resource "aws_route_table" "private" {
   # NAT Gateway로 라우팅
   route {
     cidr_block     = "0.0.0.0/0"
-    nat_gateway_id = aws_nat_gateway.mcserver_nat.id
+     gateway_id = aws_internet_gateway.mcserver_igw.id #테스트
+    # nat_gateway_id = aws_nat_gateway.mcserver_nat.id
   }
 }
 
