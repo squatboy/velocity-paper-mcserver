@@ -4,9 +4,9 @@
 module "vpc" {
   source = "./modules/vpc"
 
-  project_name         = var.project_name
-  vpc_cidr             = var.vpc_cidr
-  availability_zone    = var.availability_zone
+  project_name        = var.project_name
+  vpc_cidr            = var.vpc_cidr
+  availability_zone   = var.availability_zone
   public_subnet_cidr  = var.public_subnet_cidr
   private_subnet_cidr = var.private_subnet_cidr
 }
@@ -71,7 +71,7 @@ module "ec2" {
 }
 
 # =============================================================================
-# 백업 모듈 호출
+# DLM 백업 모듈 호출
 # =============================================================================
 module "dlm" {
   source = "./modules/dlm"
@@ -114,7 +114,7 @@ module "lambda" {
 
   project_name        = var.project_name
   discord_webhook_url = var.discord_webhook_url
-  
+
 }
 
 # SNS Topic에 Lambda 구독 추가
@@ -139,10 +139,10 @@ resource "aws_lambda_permission" "sns_invoke" {
 module "cloudwatch" {
   source = "./modules/cloudwatch"
 
-  project_name          = var.project_name
-  velocity_instance_id  = module.ec2.ec2_instances_info.velocity.id
-  paper_instance_id     = module.ec2.ec2_instances_info.paper.id
-  sns_topic_arn         = module.sns.sns_topic_arn
+  project_name         = var.project_name
+  velocity_instance_id = module.ec2.ec2_instances_info.velocity.id
+  paper_instance_id    = module.ec2.ec2_instances_info.paper.id
+  sns_topic_arn        = module.sns.sns_topic_arn
 
   # EC2 및 SNS, Lambda 모듈 완료 후 실행
   depends_on = [module.ec2, module.sns, module.lambda]

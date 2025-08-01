@@ -16,7 +16,7 @@ resource "aws_dlm_lifecycle_policy" "ebs_snapshot_policy" {
       create_rule {
         interval      = 1
         interval_unit = "HOURS"
-        times         = ["00:00"] # Starts at midnight UTC
+        times         = ["00:00"]
       }
 
       retain_rule {

@@ -125,10 +125,10 @@ output "cloudwatch_alarm_names" {
 output "monitoring_info" {
   description = "모니터링 시스템 전체 정보"
   value = {
-    vpc_flow_logs_bucket      = module.flow_logs.s3_bucket_name
-    cloudwatch_log_groups     = module.cloudwatch.log_groups
-    sns_topic_arn            = module.sns.sns_topic_arn
-    cloudwatch_agent_config  = module.cloudwatch.cloudwatch_agent_config_parameter
-    cloudwatch_alarms        = module.cloudwatch.alarm_names
+    vpc_flow_logs_bucket    = module.flow_logs.s3_bucket_name
+    cloudwatch_log_groups   = module.cloudwatch.log_groups
+    sns_topic_arn           = module.sns.sns_topic_arn
+    cloudwatch_agent_config = module.cloudwatch.cloudwatch_agent_config_parameter
+    cloudwatch_alarms       = module.cloudwatch.alarm_names
   }
 }

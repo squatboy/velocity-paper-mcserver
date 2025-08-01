@@ -14,11 +14,12 @@ output "ec2_instance_profile_name" {
 }
 
 output "ec2_instance_profile_arn" {
+
   description = "EC2 Instance Profile ARN"
   value       = aws_iam_instance_profile.ec2_profile.arn
 }
 
 output "dlm_role_arn" {
-  description = "DLM Service IAM Role ARN"
-  value       = aws_iam_role.dlm_role.arn
+    description = "DLM Service IAM Role ARN"
+    value       = aws_iam_role.dlm_role.arn
 }

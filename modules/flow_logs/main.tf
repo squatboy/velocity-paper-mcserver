@@ -59,6 +59,10 @@ resource "aws_s3_bucket_lifecycle_configuration" "vpc_flow_logs_lifecycle" {
     id     = "log-expiration"
     status = "Enabled"
 
+    filter {
+      prefix = "mcserver-flow-logs/"
+    }
+
     expiration {
       days = 30
     }
