@@ -1,0 +1,42 @@
+# .github/workflows/terraform-ci.yml
+name: Terraform Validation and Security Check
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - '**.tf'
+      - '**.tfvars'
+
+jobs:
+  terraform-check:
+    name: Terraform Quality and Security
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Terraform
+      uses: hashicorp/setup-terraform@v3
+      with:
+        terraform_version: "1.6.0" # 프로젝트 상황에 맞는 버전으로 조정 가능
+
+    - name: Terraform init
+      id: init
+      run: terraform init -input=false
+      
+    - name: Terraform fmt (format check)
+      id: fmt
+      run: terraform fmt
+
+    - name: Terraform validate (syntax and internal validation)
+      id: validate
+      run: terraform validate
+
+    - name: Tfsec (보안 스캔)
+      uses: aquasecurity/tfsec-action@v1
+      with:
+        directory: ./
+        soft_fail: true

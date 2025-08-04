@@ -9,6 +9,5 @@ plan.out
 
 docs
 *.md
-.github/
 .env
 .zip
