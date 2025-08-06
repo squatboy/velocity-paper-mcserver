@@ -101,15 +101,17 @@ fi
 
 # 마운트 포인트 생성
 mkdir -p ${MOUNT_POINT}
-chown ubuntu:ubuntu ${MOUNT_POINT}
+echo "Mount point ${MOUNT_POINT} created."
 
 # 마운트
 mount ${DEVICE_PATH} ${MOUNT_POINT}
-chown ubuntu:ubuntu ${MOUNT_POINT}
+chown -R ubuntu:ubuntu ${MOUNT_POINT}
+echo "EBS volume ${DEVICE_PATH} mounted to ${MOUNT_POINT} and ownership set."
 
 # fstab에 추가 (재부팅 시 자동 마운트)
 UUID=$(blkid -s UUID -o value ${DEVICE_PATH})
 if [ -n "$UUID" ] && ! grep -q "UUID=$UUID" /etc/fstab; then
+  echo "Adding entry to /etc/fstab for UUID=$UUID."
   echo "UUID=$UUID ${MOUNT_POINT} ext4 defaults,nofail 0 2" >> /etc/fstab
 fi
 
@@ -124,6 +126,7 @@ chown ubuntu:ubuntu /portainer
 # 작업 디렉토리 생성
 mkdir -p /mcserver/paper
 chown ubuntu:ubuntu /mcserver/paper
+echo "Working directory /mcserver/paper created"
 
 # Docker Compose 파일 생성
 cat > /mcserver/paper/docker-compose.yml <<EOF
