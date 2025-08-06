@@ -2,16 +2,19 @@
 
 # 로그 설정
 exec > >(tee /var/log/user-data.log) 2>&1
-echo "=== Paper Server EC2 User Data Script Started at $(date) ==="
+echo "=== Velocity Proxy EC2 User Data Script Started at $(date) ==="
 
 # 시스템 업데이트
 apt-get update
 apt-get upgrade -y
+echo "System updated successfully."
 
 # Docker 설치
 curl -fsSL https://get.docker.com -o get-docker.sh
 sh get-docker.sh
-usermod -aG docker ubuntu
+echo "Docker installed successfully."
+sudo usermod -aG docker ubuntu
+echo "User 'ubuntu' added to 'docker' group."
 
 # Docker Compose 설치
 curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
