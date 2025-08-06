@@ -35,7 +35,7 @@ echo "CloudWatch Agent installed."
     -a fetch-config \
     -m ec2 \
     -s \
-    -c ssm:/aws/cloudwatch-agent/mcserver
+    -c ssm:/mcserver/cloudwatch-agent/config
 
 echo "CloudWatch Agent configured and started."
 

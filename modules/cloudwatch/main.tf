@@ -156,7 +156,7 @@ resource "aws_cloudwatch_metric_alarm" "paper_network_monitoring" {
 
 # CloudWatch Agent 설정 파일 생성 (SSM Parameter로 저장)
 resource "aws_ssm_parameter" "cloudwatch_agent_config" {
-  name = "/aws/cloudwatch-agent/${var.project_name}"
+  name = "/${var.project_name}/cloudwatch-agent/config"
   type = "String"
   value = jsonencode({
     agent = {
