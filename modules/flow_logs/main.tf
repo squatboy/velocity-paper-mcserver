@@ -4,7 +4,7 @@
 
 # VPC Flow Logs를 위한 S3 버킷
 resource "aws_s3_bucket" "vpc_flow_logs" {
-  bucket = "${var.project_name}-vpc-flow-logs-${random_string.bucket_suffix.result}"
+  bucket = "${var.project_name}-vpc-flow-logs"
   
   tags = {
     Name        = "${var.project_name}-vpc-flow-logs"

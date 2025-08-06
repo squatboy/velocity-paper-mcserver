@@ -10,10 +10,10 @@ apt-get upgrade -y
 echo "System updated successfully."
 
 # Docker 설치
-curl -fsSL https://get.docker.sh -o get-docker.sh
+curl -fsSL https://get.docker.com -o get-docker.sh
 sh get-docker.sh
 echo "Docker installed successfully."
-usermod -aG docker ubuntu
+sudo usermod -aG docker ubuntu
 echo "User 'ubuntu' added to 'docker' group."
 
 # Docker 서비스 시작
