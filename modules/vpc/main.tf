@@ -93,3 +93,81 @@ resource "aws_route_table_association" "private" {
   subnet_id      = aws_subnet.private.id
   route_table_id = aws_route_table.private.id
 }
+
+
+# =============================================================================
+# SSM
+# =============================================================================
+resource "aws_security_group" "ssm_endpoint_sg" {
+  name        = "${var.project_name}-ssm-endpoint-sg"
+  description = "Allow TLS from private subnet to SSM VPC endpoint"
+  vpc_id      = aws_vpc.main.id
+
+  ingress {
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = [var.private_subnet_cidr]
+  }
+
+  tags = {
+    Name = "${var.project_name}-ssm-endpoint-sg"
+  }
+}
+
+resource "aws_vpc_endpoint" "ssm" {
+  vpc_id              = aws_vpc.main.id
+  service_name        = "com.amazonaws.${var.aws_region}.ssm"
+  vpc_endpoint_type   = "Interface"
+  private_dns_enabled = true
+
+  subnet_ids = [
+    aws_subnet.private.id
+  ]
+
+  security_group_ids = [
+    aws_security_group.ssm_endpoint_sg.id
+  ]
+
+  tags = {
+    Name = "${var.project_name}-ssm-endpoint"
+  }
+}
+
+resource "aws_vpc_endpoint" "ssmmessages" {
+  vpc_id              = aws_vpc.main.id
+  service_name        = "com.amazonaws.${var.aws_region}.ssmmessages"
+  vpc_endpoint_type   = "Interface"
+  private_dns_enabled = true
+
+  subnet_ids = [
+    aws_subnet.private.id
+  ]
+
+  security_group_ids = [
+    aws_security_group.ssm_endpoint_sg.id
+  ]
+
+  tags = {
+    Name = "${var.project_name}-ssmmessages-endpoint"
+  }
+}
+
+resource "aws_vpc_endpoint" "ec2messages" {
+  vpc_id              = aws_vpc.main.id
+  service_name        = "com.amazonaws.${var.aws_region}.ec2messages"
+  vpc_endpoint_type   = "Interface"
+  private_dns_enabled = true
+
+  subnet_ids = [
+    aws_subnet.private.id
+  ]
+
+  security_group_ids = [
+    aws_security_group.ssm_endpoint_sg.id
+  ]
+
+  tags = {
+    Name = "${var.project_name}-ec2messages-endpoint"
+  }
+}
