@@ -112,9 +112,11 @@ fi
 
 echo "EBS volume mounted successfully on ${MOUNT_POINT}"
 
-# Paper 서버별 데이터 디렉토리 생성
+# Paper 서버별 데이터 디렉토리 및 Portainer 데이터 디렉토리 생성
 mkdir -p ${MOUNT_POINT}/{lobby,wild,village}
+mkdir -p /portainer
 chown -R ubuntu:ubuntu ${MOUNT_POINT}
+chown ubuntu:ubuntu /portainer
 
 # 작업 디렉토리 생성
 mkdir -p /mcserver/paper
@@ -124,6 +126,16 @@ chown ubuntu:ubuntu /mcserver/paper
 cat > /mcserver/paper/docker-compose.yml <<EOF
 version: '3.8'
 services:
+  portainer:
+    image: portainer/portainer-ce:latest
+    container_name: portainer
+    restart: always
+    ports:
+      - "9000:9000"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /portainer:/data
+
   lobby-server:
     image: itzg/minecraft-server
     ports:
