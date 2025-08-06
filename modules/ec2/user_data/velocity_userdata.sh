@@ -36,23 +36,9 @@ echo "CloudWatch Agent installed."
     -a fetch-config \
     -m ec2 \
     -s \
-    -c ssm:/aws/cloudwatch-agent/mcserver
+    -c ssm:/mcserver/cloudwatch-agent/config
 
 echo "CloudWatch Agent configured and started."
-
-
-# Docker 설치
-curl -fsSL https://get.docker.com -o get-docker.sh
-sh get-docker.sh
-usermod -aG docker ubuntu
-
-# Docker 서비스 시작
-systemctl start docker
-systemctl enable docker
-
-# SSM Agent 설치 및 시작
-systemctl start amazon-ssm-agent
-systemctl enable amazon-ssm-agent
 
 # --- EBS 볼륨 마운트 설정 ---
 echo "=== EBS Volume Setup for Velocity ==="
@@ -60,6 +46,7 @@ MOUNT_POINT="/mcserver/velocity"
 DEVICE_PATH=""
 MAX_RETRIES=60 # 5분 (60회 * 5초)
 RETRY_COUNT=0
+
 
 # 부팅 시점의 블록 디바이스 상태를 로그로 기록
 echo "Initial block device state:"
