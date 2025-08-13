@@ -123,6 +123,10 @@ mkdir -p /portainer
 chown -R ubuntu:ubuntu ${MOUNT_POINT}
 chown ubuntu:ubuntu /portainer
 
+# 공통 Paper 글로벌 설정 파일 준비
+touch "${MOUNT_POINT}/paper-global.yml"
+chown ubuntu:ubuntu "${MOUNT_POINT}/paper-global.yml"
+
 # 작업 디렉토리 생성
 mkdir -p /mcserver/paper
 chown ubuntu:ubuntu /mcserver/paper
@@ -154,8 +158,8 @@ services:
       - SERVER_NAME=Lobby Server
       - MEMORY=1G
     volumes:
-      - ${MOUNT_POINT}/lobby/config/paper-global.yml:/config/paper-global.yml
-      - ${MOUNT_POINT}/lobby:/data
+  - ${MOUNT_POINT}/paper-global.yml:/config/paper-global.yml:ro
+  - ${MOUNT_POINT}/lobby:/data
     restart: unless-stopped
     stdin_open: true
     tty: true
@@ -172,8 +176,8 @@ services:
       - SERVER_NAME=Wild Server
       - MEMORY=1G
     volumes:
-      - ${MOUNT_POINT}/wild/config/paper-global.yml:/config/paper-global.yml
-      - ${MOUNT_POINT}/wild:/data
+  - ${MOUNT_POINT}/paper-global.yml:/config/paper-global.yml:ro
+  - ${MOUNT_POINT}/wild:/data
     restart: unless-stopped
     stdin_open: true
     tty: true
@@ -190,8 +194,8 @@ services:
       - SERVER_NAME=Village Server
       - MEMORY=1G
     volumes:
-      - ${MOUNT_POINT}/village/config/paper-global.yml:/config/paper-global.yml
-      - ${MOUNT_POINT}/village:/data
+  - ${MOUNT_POINT}/paper-global.yml:/config/paper-global.yml:ro
+  - ${MOUNT_POINT}/village:/data
     restart: unless-stopped
     stdin_open: true
     tty: true
