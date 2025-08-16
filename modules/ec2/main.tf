@@ -24,15 +24,15 @@ data "aws_ami" "ubuntu" {
 
 
 # Velocity EC2용 Elastic IP
-resource "aws_eip" "velocity_eip" {
-  domain   = "vpc"
-  instance = aws_instance.velocity_ec2.id
+# resource "aws_eip" "velocity_eip" {
+#   domain   = "vpc"
+#   instance = aws_instance.velocity_ec2.id
 
-  depends_on = [aws_instance.velocity_ec2]
-  tags = {
-    Name = "${var.project_name}-velocity-eip"
-  }
-}
+#   depends_on = [aws_instance.velocity_ec2]
+#   tags = {
+#     Name = "${var.project_name}-velocity-eip"
+#   }
+# }
 
 # Velocity Server EC2 
 resource "aws_instance" "velocity_ec2" {

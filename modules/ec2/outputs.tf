@@ -4,7 +4,7 @@ output "ec2_instances_info" {
     velocity = {
       id         = aws_instance.velocity_ec2.id
       private_ip = aws_instance.velocity_ec2.private_ip
-      public_ip  = aws_eip.velocity_eip.public_ip
+      public_ip  = aws_instance.velocity_ec2.public_ip
       type       = var.velocity_instance_type
     }
     paper = {
