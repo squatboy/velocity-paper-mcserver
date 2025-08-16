@@ -128,12 +128,12 @@ touch "${MOUNT_POINT}/paper-global.yml"
 chown ubuntu:ubuntu "${MOUNT_POINT}/paper-global.yml"
 
 # 작업 디렉토리 생성
-mkdir -p /mcserver/paper
-chown ubuntu:ubuntu /mcserver/paper
-echo "Working directory /mcserver/paper created"
+mkdir -p /mcserver
+chown ubuntu:ubuntu /mcserver
+echo "Working directory /mcserver created"
 
 # Docker Compose 파일 생성
-cat > /mcserver/paper/docker-compose.yml <<EOF
+cat > /mcserver/docker-compose.yml <<EOF
 version: '3.8'
 services:
   portainer:
@@ -144,7 +144,7 @@ services:
       - "9000:9000"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-      - /portainer:/data
+      - ${MOUNT_POINT}/portainer:/data
 
   lobby-server:
     image: itzg/minecraft-server
@@ -158,8 +158,7 @@ services:
       - SERVER_NAME=Lobby Server
       - MEMORY=1G
     volumes:
-  - ${MOUNT_POINT}/paper-global.yml:/config/paper-global.yml:ro
-  - ${MOUNT_POINT}/lobby:/data
+      - ${MOUNT_POINT}/lobby:/data
     restart: unless-stopped
     stdin_open: true
     tty: true
@@ -176,8 +175,7 @@ services:
       - SERVER_NAME=Wild Server
       - MEMORY=1G
     volumes:
-  - ${MOUNT_POINT}/paper-global.yml:/config/paper-global.yml:ro
-  - ${MOUNT_POINT}/wild:/data
+      - ${MOUNT_POINT}/wild:/data
     restart: unless-stopped
     stdin_open: true
     tty: true
@@ -194,18 +192,17 @@ services:
       - SERVER_NAME=Village Server
       - MEMORY=1G
     volumes:
-  - ${MOUNT_POINT}/paper-global.yml:/config/paper-global.yml:ro
-  - ${MOUNT_POINT}/village:/data
+      - ${MOUNT_POINT}/village:/data
     restart: unless-stopped
     stdin_open: true
     tty: true
 EOF
 
 # 권한 설정
-chown ubuntu:ubuntu /mcserver/paper/docker-compose.yml
+chown ubuntu:ubuntu /mcserver/docker-compose.yml
 
 # Paper 서버들 시작
-cd /mcserver/paper
+cd /mcserver
 docker-compose up -d
 
 echo "=== Paper Server EC2 Setup Completed at $(date) ==="
