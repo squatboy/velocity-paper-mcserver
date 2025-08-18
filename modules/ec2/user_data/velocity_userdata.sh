@@ -44,9 +44,10 @@ echo "CloudWatch Agent configured and started."
 echo "=== EBS Volume Setup for Velocity ==="
 MOUNT_POINT="/mcserver/velocity"
 DEVICE_PATH=""
-MAX_RETRIES=60 # 5분 (60회 * 5초)
-RETRY_COUNT=0
 
+# EBS 볼륨 마운트 Race Condition 방지용
+MAX_RETRIES=60
+RETRY_COUNT=0
 
 # 부팅 시점의 블록 디바이스 상태를 로그로 기록
 echo "Initial block device state:"
