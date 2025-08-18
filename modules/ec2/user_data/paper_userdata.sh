@@ -46,6 +46,8 @@ echo "CloudWatch Agent configured and started."
 echo "=== EBS Volume Setup ==="
 MOUNT_POINT="/mcserver"
 DEVICE_PATH=""
+
+# EBS 볼륨 마운트 Race Condition 방지용
 MAX_RETRIES=60
 RETRY_COUNT=0
 
@@ -118,19 +120,12 @@ fi
 echo "EBS volume mounted successfully on ${MOUNT_POINT}"
 
 # Paper 서버별 데이터 디렉토리 및 Portainer 데이터 디렉토리 생성
-mkdir -p ${MOUNT_POINT}/{lobby,wild,village}
-mkdir -p /portainer
+mkdir -p ${MOUNT_POINT}/{lobby,wild,village,portainer}
 chown -R ubuntu:ubuntu ${MOUNT_POINT}
-chown ubuntu:ubuntu /portainer
 
 # 공통 Paper 글로벌 설정 파일 준비
 touch "${MOUNT_POINT}/paper-global.yml"
 chown ubuntu:ubuntu "${MOUNT_POINT}/paper-global.yml"
-
-# 작업 디렉토리 생성
-mkdir -p /mcserver
-chown ubuntu:ubuntu /mcserver
-echo "Working directory /mcserver created"
 
 # Docker Compose 파일 생성
 cat > /mcserver/docker-compose.yml <<EOF
