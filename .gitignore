@@ -12,3 +12,4 @@ docs
 .github/
 .env
 .zip
+modules/lambda/lambda_function.zip
