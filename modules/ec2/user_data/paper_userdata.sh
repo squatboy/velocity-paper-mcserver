@@ -123,10 +123,6 @@ echo "EBS volume mounted successfully on ${MOUNT_POINT}"
 mkdir -p ${MOUNT_POINT}/{lobby,wild,village,portainer}
 chown -R ubuntu:ubuntu ${MOUNT_POINT}
 
-# 공통 Paper 글로벌 설정 파일 준비
-touch "${MOUNT_POINT}/paper-global.yml"
-chown ubuntu:ubuntu "${MOUNT_POINT}/paper-global.yml"
-
 # Docker Compose 파일 생성
 cat > /mcserver/docker-compose.yml <<EOF
 version: '3.8'

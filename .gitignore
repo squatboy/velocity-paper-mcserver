@@ -11,3 +11,4 @@ docs
 *.md
 .env
 .zip
+modules/lambda/lambda_function.zip
