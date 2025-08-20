@@ -1,39 +1,4 @@
-# =============================================================================
-# CloudWatch 로그 그룹 설정
-# =============================================================================
-
-# Velocity 서버 로그 그룹
-resource "aws_cloudwatch_log_group" "velocity_logs" {
-  name              = "/minecraft/velocity"
-  retention_in_days = 3 # 비용 절약을 위해 3일로 단축
-
-  tags = {
-    Name        = "${var.project_name}-velocity-logs"
-    Environment = "production"
-  }
-}
-
-# Paper 서버 로그 그룹
-resource "aws_cloudwatch_log_group" "paper_logs" {
-  name              = "/minecraft/paper"
-  retention_in_days = 3 # 비용 절약을 위해 3일로 단축
-
-  tags = {
-    Name        = "${var.project_name}-paper-logs"
-    Environment = "production"
-  }
-}
-
-# 시스템 로그 그룹
-resource "aws_cloudwatch_log_group" "system_logs" {
-  name              = "/aws/ec2/system"
-  retention_in_days = 7 # 시스템 로그는 7일 유지
-
-  tags = {
-    Name        = "${var.project_name}-system-logs"
-    Environment = "production"
-  }
-}
+# (CloudWatch Logs 비사용) 로그 그룹 생성 제거
 
 # =============================================================================
 # CloudWatch 알람 설정
@@ -179,34 +144,6 @@ resource "aws_ssm_parameter" "cloudwatch_agent_config" {
         }
         netstat = {
           measurement = ["tcp_established"] # 필수 메트릭만
-        }
-      }
-    }
-    logs = {
-      metrics_collected = {
-        docker = {
-          metrics_collection_interval = 30 # Docker 메트릭 수집 간격 (30초)
-        }
-      }
-      logs_collected = {
-        files = {
-          collect_list = [
-            {
-              file_path       = "/var/log/user-data.log"
-              log_group_name  = aws_cloudwatch_log_group.system_logs.name
-              log_stream_name = "{instance_id}/user-data"
-            },
-            {
-              file_path       = "/mcserver/velocity/logs/latest.log"
-              log_group_name  = aws_cloudwatch_log_group.velocity_logs.name
-              log_stream_name = "{instance_id}/velocity"
-            },
-            {
-              file_path       = "/mcserver/paper/logs/*.log"
-              log_group_name  = aws_cloudwatch_log_group.paper_logs.name
-              log_stream_name = "{instance_id}/paper"
-            }
-          ]
         }
       }
     }

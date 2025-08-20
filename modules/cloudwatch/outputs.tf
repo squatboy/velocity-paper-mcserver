@@ -1,11 +1,4 @@
-output "log_groups" {
-  description = "CloudWatch log groups"
-  value = {
-    velocity_logs = aws_cloudwatch_log_group.velocity_logs.name
-    paper_logs    = aws_cloudwatch_log_group.paper_logs.name
-    system_logs   = aws_cloudwatch_log_group.system_logs.name
-  }
-}
+
 
 output "cloudwatch_agent_config_parameter" {
   description = "SSM Parameter name for CloudWatch Agent configuration"
