@@ -103,11 +103,6 @@ output "sns_topic_name" {
 # CloudWatch Module Outputs
 # =============================================================================
 
-output "cloudwatch_log_groups" {
-  description = "CloudWatch 로그 그룹들"
-  value       = module.cloudwatch.log_groups
-}
-
 output "cloudwatch_agent_config_parameter" {
   description = "CloudWatch Agent 설정 SSM Parameter"
   value       = module.cloudwatch.cloudwatch_agent_config_parameter
@@ -126,7 +121,6 @@ output "monitoring_info" {
   description = "모니터링 시스템 전체 정보"
   value = {
     vpc_flow_logs_bucket    = module.flow_logs.s3_bucket_name
-    cloudwatch_log_groups   = module.cloudwatch.log_groups
     sns_topic_arn           = module.sns.sns_topic_arn
     cloudwatch_agent_config = module.cloudwatch.cloudwatch_agent_config_parameter
     cloudwatch_alarms       = module.cloudwatch.alarm_names
