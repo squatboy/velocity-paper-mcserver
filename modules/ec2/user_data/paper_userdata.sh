@@ -23,10 +23,12 @@ chmod +x /usr/local/bin/docker-compose
 # Docker 서비스 시작
 systemctl start docker
 systemctl enable docker
+echo "Docker service started and enabled."
 
 # SSM Agent 설치 및 시작
 systemctl start amazon-ssm-agent
 systemctl enable amazon-ssm-agent
+echo "SSM Agent started and enabled."
 
 # CloudWatch Agent 설치
 wget https://s3.amazonaws.com/amazoncloudwatch-agent/ubuntu/arm64/latest/amazon-cloudwatch-agent.deb
@@ -149,7 +151,7 @@ services:
       - SERVER_NAME=Lobby Server
       - MEMORY=1G
     volumes:
-      - ${MOUNT_POINT}/lobby:/data
+      - ${MOUNT_POINT}/paper/lobby:/data
     restart: unless-stopped
     stdin_open: true
     tty: true
@@ -166,7 +168,7 @@ services:
       - SERVER_NAME=Wild Server
       - MEMORY=1G
     volumes:
-      - ${MOUNT_POINT}/wild:/data
+      - ${MOUNT_POINT}/paper/wild:/data
     restart: unless-stopped
     stdin_open: true
     tty: true
@@ -183,7 +185,7 @@ services:
       - SERVER_NAME=Village Server
       - MEMORY=1G
     volumes:
-      - ${MOUNT_POINT}/village:/data
+      - ${MOUNT_POINT}/paper/village:/data
     restart: unless-stopped
     stdin_open: true
     tty: true
