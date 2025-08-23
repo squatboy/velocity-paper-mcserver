@@ -16,6 +16,10 @@ echo "Docker installed successfully."
 sudo usermod -aG docker ubuntu
 echo "User 'ubuntu' added to 'docker' group."
 
+# Docker Compose 설치
+curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+chmod +x /usr/local/bin/docker-compose
+
 # Docker 서비스 시작
 systemctl start docker
 systemctl enable docker
@@ -42,7 +46,7 @@ echo "CloudWatch Agent configured and started."
 
 # --- EBS 볼륨 마운트 설정 ---
 echo "=== EBS Volume Setup for Velocity ==="
-MOUNT_POINT="/mcserver/velocity"
+MOUNT_POINT="/mcserver"
 DEVICE_PATH=""
 
 # EBS 볼륨 마운트 Race Condition 방지용
@@ -122,17 +126,32 @@ mkdir -p /mcserver/velocity
 chown ubuntu:ubuntu /mcserver/velocity
 echo "Working directory /mcserver/velocity created and ownership set."
 
-# Velocity 서버 Docker 컨테이너 실행
-echo "Starting Velocity Proxy Docker container"
-docker run -d \
-  -p 25565:25565 \
-  -e TYPE="VELOCITY" \
-  -e EULA="TRUE" \
-  -e MEMORY="512m" \
-  -v "${MOUNT_POINT}:/server" \
-  --restart unless-stopped \
-  -i -t \
-  --name velocity-proxy \
-  itzg/mc-proxy
+# Docker Compose 파일 생성
+cat > /mcserver/docker-compose.yml <<EOF
+version: '3.8'
+services:
+  velocity-proxy:
+    image: itzg/mc-proxy
+    container_name: velocity-proxy
+    restart: unless-stopped
+    ports:
+      - "25565:25565"
+    environment:
+      - TYPE=VELOCITY
+      - EULA=TRUE
+      - MEMORY=512m
+    volumes:
+      - ${MOUNT_POINT}/velocity:/server
+    stdin_open: true
+    tty: true
+EOF
+
+# 권한 설정
+chown ubuntu:ubuntu /mcserver/docker-compose.yml
+
+# docker-compose 실행 (백그라운드 실행)
+cd /mcserver
+docker-compose up -d
+
 
 echo "=== Velocity Proxy EC2 Setup Completed at $(date) ==="
