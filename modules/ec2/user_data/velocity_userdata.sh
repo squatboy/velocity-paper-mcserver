@@ -126,8 +126,25 @@ mkdir -p /mcserver/velocity
 chown ubuntu:ubuntu /mcserver/velocity
 echo "Working directory /mcserver/velocity created and ownership set."
 
-# Docker Compose 파일 생성
-cat > /mcserver/docker-compose.yml <<EOF
+# Prometheus 설정 디렉토리
+mkdir -p /mcserver/monitoring/prometheus
+chown -R ubuntu:ubuntu /mcserver/monitoring
+
+# prometheus.yml 생성
+cat > /mcserver/monitoring/prometheus/prometheus.yml <<'PROMEOF'
+global:
+  scrape_interval: ${PROMETHEUS_SCRAPE_INTERVAL}
+
+scrape_configs:
+  - job_name: 'velocity'
+    static_configs:
+      - targets: ['velocity-proxy:9985']
+PROMEOF
+
+chown ubuntu:ubuntu /mcserver/monitoring/prometheus/prometheus.yml
+
+# Docker Compose 파일 생성 (Velocity + Prometheus + Grafana)
+cat > /mcserver/docker-compose.yml <<'EOF'
 version: '3.8'
 services:
   velocity-proxy:
@@ -141,17 +158,55 @@ services:
       - EULA=TRUE
       - MEMORY=512m
     volumes:
-      - ${MOUNT_POINT}/velocity:/server
+      - /mcserver/velocity:/server
     stdin_open: true
     tty: true
+
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    restart: unless-stopped
+    user: root
+    command:
+      - --config.file=/etc/prometheus/prometheus.yml
+      - --storage.tsdb.path=/prometheus
+      - --storage.tsdb.retention.time=${PROMETHEUS_RETENTION}
+      - --web.enable-lifecycle
+    volumes:
+      - /mcserver/monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - /mcserver/monitoring/prometheus/data:/prometheus
+    network_mode: bridge
+
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=${GRAFANA_ADMIN_USERNAME}
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD}
+      - GF_USERS_ALLOW_SIGN_UP=false
+      - GF_ANALYTICS_REPORTING_ENABLED=false
+      - GF_INSTALL_PLUGINS=grafana-piechart-panel
+    volumes:
+      - /mcserver/monitoring/grafana:/var/lib/grafana
+    depends_on:
+      - prometheus
 EOF
 
-# 권한 설정
 chown ubuntu:ubuntu /mcserver/docker-compose.yml
 
-# docker-compose 실행 (백그라운드 실행)
+# 환경 변수 주입 후 docker-compose 실행
 cd /mcserver
+export GRAFANA_ADMIN_USERNAME="${GRAFANA_ADMIN_USERNAME}"
+export GRAFANA_ADMIN_PASSWORD="${GRAFANA_ADMIN_PASSWORD}"
+export PROMETHEUS_SCRAPE_INTERVAL="${PROMETHEUS_SCRAPE_INTERVAL}"
+export PROMETHEUS_RETENTION="${PROMETHEUS_RETENTION}"
+
 docker-compose up -d
 
+echo "Grafana credentials: $GRAFANA_ADMIN_USERNAME / (hidden)" | sed 's/(hidden)/********/'
+echo "Prometheus & Grafana stack launched."
 
 echo "=== Velocity Proxy EC2 Setup Completed at $(date) ==="

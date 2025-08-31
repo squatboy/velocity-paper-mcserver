@@ -124,5 +124,15 @@ output "monitoring_info" {
     sns_topic_arn           = module.sns.sns_topic_arn
     cloudwatch_agent_config = module.cloudwatch.cloudwatch_agent_config_parameter
     cloudwatch_alarms       = module.cloudwatch.alarm_names
+    grafana_url             = "http://${module.ec2.ec2_instances_info.velocity.public_ip}:3000"
+    grafana_admin_user      = var.grafana_admin_username
+    restricted_admin_ip     = var.admin_ip
+    prometheus_scrape_interval = var.prometheus_scrape_interval
+    prometheus_retention       = var.prometheus_retention
   }
+}
+
+output "grafana_url" {
+  description = "Grafana 접속 URL (보안그룹에서 admin_ip만 허용)"
+  value       = "http://${module.ec2.ec2_instances_info.velocity.public_ip}:3000"
 }

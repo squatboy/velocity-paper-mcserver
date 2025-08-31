@@ -42,7 +42,12 @@ resource "aws_instance" "velocity_ec2" {
   vpc_security_group_ids = [var.velocity_security_group_id]
   iam_instance_profile   = var.iam_instance_profile_name
   key_name               = var.key_name
-  user_data              = base64encode(file("${path.module}/user_data/velocity_userdata.sh"))
+  user_data = base64encode(templatefile("${path.module}/user_data/velocity_userdata.sh", {
+    GRAFANA_ADMIN_USERNAME    = var.grafana_admin_username
+    GRAFANA_ADMIN_PASSWORD    = var.grafana_admin_password
+    PROMETHEUS_SCRAPE_INTERVAL = var.prometheus_scrape_interval
+    PROMETHEUS_RETENTION       = var.prometheus_retention
+  }))
   tags = {
     Name = "${var.project_name}-velocity-ec2"
   }

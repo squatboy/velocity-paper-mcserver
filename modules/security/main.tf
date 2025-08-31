@@ -38,6 +38,16 @@ resource "aws_vpc_security_group_ingress_rule" "velocity_ssh_ingress" {
   description       = "SSH access from anywhere"
 }
 
+# Grafana UI 인바운드 규칙 (운영자 고정 IP만 허용)
+resource "aws_vpc_security_group_ingress_rule" "grafana_ingress" {
+  security_group_id = aws_security_group.mcserver_velocity_sg.id
+  from_port         = 3000
+  to_port           = 3000
+  ip_protocol       = "tcp"
+  cidr_ipv4         = var.admin_ip
+  description       = "Grafana UI access (restricted)"
+}
+
 # Paper Server 인바운드 규칙 (Proxy에서만 허용)
 resource "aws_vpc_security_group_ingress_rule" "paper_ingress" {
   security_group_id = aws_security_group.mcserver_paper_sg.id

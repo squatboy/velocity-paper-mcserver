@@ -63,3 +63,24 @@ variable "key_name" {
   description = "EC2 인스턴스에 사용할 키페어 이름"
   type        = string
 }
+
+variable "grafana_admin_username" {
+  description = "Grafana 관리자 유저명"
+  type        = string
+}
+
+variable "grafana_admin_password" {
+  description = "Grafana 관리자 비밀번호"
+  type        = string
+  sensitive   = true
+}
+
+variable "prometheus_scrape_interval" {
+  description = "Prometheus scrape interval"
+  type        = string
+}
+
+variable "prometheus_retention" {
+  description = "Prometheus 데이터 보존 기간"
+  type        = string
+}

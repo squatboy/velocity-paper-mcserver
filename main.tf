@@ -21,7 +21,7 @@ module "security" {
   # 필수 변수들
   project_name = var.project_name
   vpc_id       = module.vpc.vpc_id
-
+  admin_ip     = var.admin_ip
   # VPC 모듈 완료 후 실행
   depends_on = [module.vpc]
 }
@@ -66,6 +66,10 @@ module "ec2" {
   velocity_instance_type     = var.velocity_instance_type
   paper_instance_type        = var.paper_instance_type
   key_name                   = var.key_name
+  grafana_admin_username     = var.grafana_admin_username
+  grafana_admin_password     = var.grafana_admin_password
+  prometheus_scrape_interval = var.prometheus_scrape_interval
+  prometheus_retention       = var.prometheus_retention
 
   # 모든 의존성 모듈이 완료된 후 실행
   depends_on = [module.vpc, module.security, module.iam, module.ebs]

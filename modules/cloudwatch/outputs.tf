@@ -1,5 +1,3 @@
-
-
 output "cloudwatch_agent_config_parameter" {
   description = "SSM Parameter name for CloudWatch Agent configuration"
   value       = aws_ssm_parameter.cloudwatch_agent_config.name

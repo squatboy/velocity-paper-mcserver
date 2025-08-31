@@ -87,3 +87,37 @@ variable "discord_webhook_url" {
   type        = string
   sensitive   = true
 }
+
+# =============================================================================
+# Observability (Prometheus & Grafana) Variables
+# =============================================================================
+
+variable "admin_ip" {
+  description = "운영자가 접속할 고정 IP (Grafana UI 제한용 CIDR)"
+  type        = string
+  sensitive   = true
+}
+
+variable "grafana_admin_username" {
+  description = "Grafana 관리자 유저명"
+  type        = string
+  sensitive   = true
+}
+
+variable "grafana_admin_password" {
+  description = "Grafana 관리자 비밀번호"
+  type        = string
+  sensitive   = true
+}
+
+variable "prometheus_scrape_interval" {
+  description = "Prometheus 전역 scrape interval"
+  type        = string
+  default     = "5s"
+}
+
+variable "prometheus_retention" {
+  description = "Prometheus TSDB 보존 기간"
+  type        = string
+  default     = "7d"
+}
