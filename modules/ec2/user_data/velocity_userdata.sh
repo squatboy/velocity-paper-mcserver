@@ -128,7 +128,19 @@ echo "Working directory /mcserver/velocity created and ownership set."
 
 # Prometheus 설정 디렉토리
 mkdir -p /mcserver/monitoring/prometheus
+mkdir -p /mcserver/monitoring/prometheus/data
+mkdir -p /mcserver/monitoring/grafana
+
 chown -R ubuntu:ubuntu /mcserver/monitoring
+
+# 컨테이너 내부 UID/GID에 맞춰 호스트 디렉토리 소유권 설정 (베스트 프랙티스)
+# Prometheus: nobody 사용자 (UID:GID = 65534:65534)
+# Grafana: grafana 사용자 (UID:GID = 472:472)
+chown -R 65534:65534 /mcserver/monitoring/prometheus/data
+chown -R 472:472 /mcserver/monitoring/grafana
+
+# prometheus.yml은 읽기 전용이므로 ubuntu 소유권 유지
+chown ubuntu:ubuntu /mcserver/monitoring/prometheus
 
 # prometheus.yml 생성
 cat > /mcserver/monitoring/prometheus/prometheus.yml <<'PROMEOF'
@@ -166,7 +178,7 @@ services:
     image: prom/prometheus:latest
     container_name: prometheus
     restart: unless-stopped
-    user: root
+    user: "65534:65534"
     command:
       - --config.file=/etc/prometheus/prometheus.yml
       - --storage.tsdb.path=/prometheus
@@ -175,12 +187,12 @@ services:
     volumes:
       - /mcserver/monitoring/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
       - /mcserver/monitoring/prometheus/data:/prometheus
-    network_mode: bridge
 
   grafana:
     image: grafana/grafana:latest
     container_name: grafana
     restart: unless-stopped
+    user: "472:472"
     ports:
       - "3000:3000"
     environment:
