@@ -1,5 +1,6 @@
 
-<img width="1681" height="987" alt="mcserver-arch" src="https://github.com/user-attachments/assets/0b1a2865-39a0-49bd-be7c-99e0649eda0e" />
+<img width="1713" height="1079" alt="image" src="https://github.com/user-attachments/assets/bec8af17-384e-4428-9334-1a5660506934" />
+
 
 > This project aims to build Medium-High Scale Minecraft Server infrastructure on AWS using **Velocity proxy server** and **Paper Minecraft servers** running inside **Docker containers** 24/7, automated and managed with **Terraform**.
 
