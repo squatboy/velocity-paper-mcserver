@@ -69,7 +69,7 @@ variable "key_name" {
 variable "paper_ebs_size" {
   description = "PaperMC 서버용 EBS 볼륨 크기 (GB)"
   type        = number
-  default     = 20
+  default     = 40
 }
 
 variable "velocity_ebs_size" {
