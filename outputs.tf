@@ -71,19 +71,7 @@ output "ec2_instances_summary" {
   value       = module.ec2.ec2_instances_info
 }
 
-# =============================================================================
-# VPC Flow Logs Module Outputs
-# =============================================================================
 
-output "vpc_flow_logs_s3_bucket" {
-  description = "VPC Flow Logs S3 버킷 이름"
-  value       = module.flow_logs.s3_bucket_name
-}
-
-output "vpc_flow_logs_s3_bucket_arn" {
-  description = "VPC Flow Logs S3 버킷 ARN"
-  value       = module.flow_logs.s3_bucket_arn
-}
 
 # =============================================================================
 # SNS Module Outputs
@@ -120,7 +108,6 @@ output "cloudwatch_alarm_names" {
 output "monitoring_info" {
   description = "모니터링 시스템 전체 정보"
   value = {
-    vpc_flow_logs_bucket    = module.flow_logs.s3_bucket_name
     sns_topic_arn           = module.sns.sns_topic_arn
     cloudwatch_agent_config = module.cloudwatch.cloudwatch_agent_config_parameter
     cloudwatch_alarms       = module.cloudwatch.alarm_names

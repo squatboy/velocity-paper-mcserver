@@ -92,18 +92,7 @@ module "dlm" {
 # 모니터링 및 알림 모듈 호출
 # =============================================================================
 
-# =================
-# VPC Flow Logs 모듈 
-# =================
-module "flow_logs" {
-  source = "./modules/flow_logs"
 
-  project_name = var.project_name
-  vpc_id       = module.vpc.vpc_id
-
-  # VPC 모듈 완료 후 실행
-  depends_on = [module.vpc]
-}
 
 # =================
 # SNS, Lambda 

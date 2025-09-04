@@ -33,9 +33,6 @@
   Resource monitoring with AWS CloudWatch Agent and Container Insights  
   Real-time alert notifications integrated via Discord webhook
 
-- **`Enhanced Security Logging`**  
-  VPC Flow Logs enabled for network traffic monitoring and security auditing
-
 - **`Automated Backup and Recovery`**  
   AWS Data Lifecycle Manager configured to create EBS snapshots every hour
 
