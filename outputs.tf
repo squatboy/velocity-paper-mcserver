@@ -120,16 +120,17 @@ output "cloudwatch_alarm_names" {
 output "monitoring_info" {
   description = "모니터링 시스템 전체 정보"
   value = {
-    vpc_flow_logs_bucket    = module.flow_logs.s3_bucket_name
-    sns_topic_arn           = module.sns.sns_topic_arn
-    cloudwatch_agent_config = module.cloudwatch.cloudwatch_agent_config_parameter
-    cloudwatch_alarms       = module.cloudwatch.alarm_names
-    grafana_url             = "http://${module.ec2.ec2_instances_info.velocity.public_ip}:3000"
-    grafana_admin_user      = var.grafana_admin_username
-    restricted_admin_ip     = var.admin_ip
+    vpc_flow_logs_bucket       = module.flow_logs.s3_bucket_name
+    sns_topic_arn              = module.sns.sns_topic_arn
+    cloudwatch_agent_config    = module.cloudwatch.cloudwatch_agent_config_parameter
+    cloudwatch_alarms          = module.cloudwatch.alarm_names
+    grafana_url                = "http://${module.ec2.ec2_instances_info.velocity.public_ip}:3000"
+    grafana_admin_user         = var.grafana_admin_username
+    restricted_admin_ip        = var.admin_ip
     prometheus_scrape_interval = var.prometheus_scrape_interval
     prometheus_retention       = var.prometheus_retention
   }
+  sensitive = true
 }
 
 output "grafana_url" {

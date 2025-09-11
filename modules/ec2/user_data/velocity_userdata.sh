@@ -72,12 +72,12 @@ while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
     # 파티션이 없는 순수 디스크인지 확인
     if [ -b "$device" ] && ! lsblk -n "$device" | grep -q "part"; then
       DEVICE_PATH="$device"
-      echo "Found attached EBS volume: $DEVICE_PATH"
+      echo "Found attached EBS volume: $${DEVICE_PATH}"
       break 2
     fi
   done
 
-  if [ -n "$DEVICE_PATH" ]; then
+  if [ -n "$${DEVICE_PATH}" ]; then
     break
   fi
 
@@ -91,35 +91,35 @@ echo "Final block device state:"
 lsblk
 
 # 디바이스를 여전히 찾지 못한 경우 에러
-if [ -z "$DEVICE_PATH" ]; then
+if [ -z "$${DEVICE_PATH}" ]; then
   echo "ERROR: EBS volume device not found after $MAX_RETRIES attempts."
   exit 1
 fi
 
 # 파일시스템 확인 및 생성 (ext4)
-if ! blkid -o value -s TYPE ${DEVICE_PATH}; then
-  echo "Creating ext4 filesystem on ${DEVICE_PATH}"
-  mkfs.ext4 ${DEVICE_PATH}
-  echo "Filesystem created on ${DEVICE_PATH}"
+if ! blkid -o value -s TYPE $${DEVICE_PATH}; then
+  echo "Creating ext4 filesystem on $${DEVICE_PATH}"
+  mkfs.ext4 $${DEVICE_PATH}
+  echo "Filesystem created on $${DEVICE_PATH}"
 fi
 
 # 마운트 포인트 생성
-mkdir -p ${MOUNT_POINT}
-echo "Mount point ${MOUNT_POINT} created."
+mkdir -p $${MOUNT_POINT}
+echo "Mount point $${MOUNT_POINT} created."
 
 # 마운트
-mount ${DEVICE_PATH} ${MOUNT_POINT}
-chown -R ubuntu:ubuntu ${MOUNT_POINT}
-echo "EBS volume ${DEVICE_PATH} mounted to ${MOUNT_POINT} and ownership set."
+mount $${DEVICE_PATH} $${MOUNT_POINT}
+chown -R ubuntu:ubuntu $${MOUNT_POINT}
+echo "EBS volume $${DEVICE_PATH} mounted to $${MOUNT_POINT} and ownership set."
 
 # fstab에 추가 (재부팅 시 자동 마운트)
-UUID=$(blkid -s UUID -o value ${DEVICE_PATH})
+UUID=$(blkid -s UUID -o value $${DEVICE_PATH})
 if [ -n "$UUID" ] && ! grep -q "UUID=$UUID" /etc/fstab; then
   echo "Adding entry to /etc/fstab for UUID=$UUID."
-  echo "UUID=$UUID ${MOUNT_POINT} ext4 defaults,nofail 0 2" >> /etc/fstab
+  echo "UUID=$UUID $${MOUNT_POINT} ext4 defaults,nofail 0 2" >> /etc/fstab
 fi
 
-echo "EBS volume for Velocity mounted successfully on ${MOUNT_POINT}"
+echo "EBS volume for Velocity mounted successfully on $${MOUNT_POINT}"
 
 # 작업 디렉토리 생성 
 mkdir -p /mcserver/velocity
