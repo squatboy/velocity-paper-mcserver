@@ -130,6 +130,7 @@ output "monitoring_info" {
     prometheus_scrape_interval = var.prometheus_scrape_interval
     prometheus_retention       = var.prometheus_retention
   }
+  sensitive = true
 }
 
 output "grafana_url" {
