@@ -5,7 +5,6 @@
 variable "aws_region" {
   description = "AWS 리전"
   type        = string
-  default     = "ap-northeast-2"
 }
 
 variable "project_name" {
@@ -21,25 +20,21 @@ variable "project_name" {
 variable "vpc_cidr" {
   description = "VPC CIDR 블록"
   type        = string
-  default     = "10.0.0.0/16"
 }
 
 variable "availability_zone" {
   description = "가용 영역"
   type        = string
-  default     = "ap-northeast-2a"
 }
 
 variable "public_subnet_cidr" {
   description = "Public Subnet CIDR 블록"
   type        = string
-  default     = "10.0.1.0/24"
 }
 
 variable "private_subnet_cidr" {
   description = "Private Subnet CIDR 블록"
   type        = string
-  default     = "10.0.11.0/24"
 }
 
 # =============================================================================
@@ -59,7 +54,6 @@ variable "paper_instance_type" {
 variable "key_name" {
   description = "EC2 인스턴스에 사용할 키페어 이름"
   type        = string
-  default     = "mcserver"
 }
 
 # =============================================================================
@@ -69,13 +63,11 @@ variable "key_name" {
 variable "paper_ebs_size" {
   description = "PaperMC 서버용 EBS 볼륨 크기 (GB)"
   type        = number
-  default     = 40
 }
 
 variable "velocity_ebs_size" {
   description = "Velocity 프록시용 EBS 볼륨 크기 (GB)"
   type        = number
-  default     = 1
 }
 
 # =============================================================================
@@ -113,11 +105,9 @@ variable "grafana_admin_password" {
 variable "prometheus_scrape_interval" {
   description = "Prometheus 전역 scrape interval"
   type        = string
-  default     = "5s"
 }
 
 variable "prometheus_retention" {
   description = "Prometheus TSDB 보존 기간"
   type        = string
-  default     = "7d"
 }
