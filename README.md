@@ -4,9 +4,7 @@
 
 This project aims to build and manage a **medium-to-large scale Minecraft server infrastructure** running on AWS, using **Velocity proxy server** and **Paper bucket servers** in **Docker containers**, automated and managed with **Terraform**.
 
-## Architecture Overview
-
-### Infrastructure Structure
+### Architecture 
 <img width="1747" height="1102" alt="image" src="https://github.com/user-attachments/assets/fc22c887-e991-468e-9afe-21a2307bcae7" />
 
 ### Main AWS Resources
